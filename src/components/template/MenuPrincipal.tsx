@@ -1,39 +1,24 @@
-import { IconArrowsLeftRight, IconLetterCase, IconMathGreater, IconMenu, IconNumbers, IconRefreshAlert, IconSection, IconUsers, IconX } from "@tabler/icons";
+import { IconMenu, IconX } from "@tabler/icons";
 import { MenuItem } from "../../data/models/MenuItem";
 import { MenuSecao } from "../../data/models/MenuSecao";
 import Logo from "./Logo";
 import MenuPrincipalItem from "./MenuPrincipalItem";
 import MenuPrincipalSecao from "./MenuPrincipalSecao";
 import Flex from "./Flex";
+import useMenu from "../../data/hooks/useMenu";
 
 export default function MenuPrincipal() {
-    const secoes = [
-        {
-            titulo: "Essenciais",
-            aberta: false,
-            itens: [
-                {titulo: "Contador", tag: "useState", url: "/essenciais/contador", icone: <IconNumbers/>},
-                {titulo: "Votação", tag: "useState", url: "/essenciais/votacao", icone: <IconUsers/>},
-                {titulo: "Consulta API", tag: "useEffect", url: "/essenciais/consultaAPI", icone: <IconArrowsLeftRight/>},
-                {titulo: "Maior", tag: "useEffect", url: "/essenciais/maior", icone: <IconMathGreater/>},
-                {titulo: "Contagem de Caracteres", tag: "useEffect", url: "/essenciais/contagemCaracteres", icone: <IconLetterCase/>},
-                {titulo: "Referencia Vs State", tag: "useRef", url: "/essenciais/stateVsRef", icone: <IconRefreshAlert/>},
-                {titulo: "Referenciando um Elemento", tag: "useRef", url: "/essenciais/refElemento", icone: <IconSection/>},
-                {titulo: "Contagem Caracteres", tag: "useRef", url: "/essenciais/contagemCaracteresRef", icone: <IconLetterCase/>},
-            ],
-        },
-        {
-            titulo: "Personalizados",
-            aberta: true,
-            itens: [
-                
-            ],
-        },
-    ];
-    const mini = false;
+    const {secoes, mini, toggleMini, alternarSecao} = useMenu();
+    
     function renderizarSecoes() {
         return secoes.map((secao: MenuSecao) => (
-            <MenuPrincipalSecao key={secao.titulo} titulo={secao.titulo} mini={mini} aberta={secao.aberta}>
+            <MenuPrincipalSecao 
+                key={secao.titulo}
+                titulo={secao.titulo} 
+                mini={mini} 
+                aberta={secao.aberta}
+                onClick={() => alternarSecao(secao)}
+            >
                 {renderizarItens(secao)}
             </MenuPrincipalSecao>
         ));
@@ -48,6 +33,7 @@ export default function MenuPrincipal() {
                 tag={item.tag}
                 url={item.url}
                 mini={mini}
+                selecionado={item.selecionado}
             />
         ));
     }
@@ -64,6 +50,9 @@ export default function MenuPrincipal() {
         >
             <Flex center className="m-7">
                 {!mini && <Logo />}
+                <div className="cursor-pointer" onClick={toggleMini}>
+                    {mini ? <IconMenu size={30} /> : <IconX size={30} />}
+                </div>
             </Flex>
             <nav className="flex flex-col gap-4 m-7">{renderizarSecoes()}</nav>
         </aside>
