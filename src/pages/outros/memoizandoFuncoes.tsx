@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import InputFormatado from "../../components/formulario/InputFormatado";
-import Botao from "../../components/template/Botao";
+import BotaoMemoizado from "../../components/template/BotaoMemoizado";
 import Display from "../../components/template/Display";
 import Flex from "../../components/template/Flex";
 import Pagina from "../../components/template/Pagina";
@@ -8,11 +8,11 @@ import Pagina from "../../components/template/Pagina";
 export default function m() {
     const [quantidade, setQuantidade] = useState(0)
 
-    function finalizar(e) {
+    const finalizar = useCallback(function(e) {
         e.preventDefault()
         alert(`Compra finalizada!`)
         setQuantidade(0)
-    }
+    }, [])
 
 
     return (
@@ -25,10 +25,10 @@ export default function m() {
                         tipo="number"
                         onInput={(e) => setQuantidade(+e.target.value)}
                     ></InputFormatado>
-                    <Botao
+                    <BotaoMemoizado
                         texto="Confirmar"
-                        onClick={(e) => finalizar(e)}
-                    ></Botao>
+                        onClick={finalizar}
+                    />
                 </Flex>
             </form>
         </Pagina>
